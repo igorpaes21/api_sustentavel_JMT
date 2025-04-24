@@ -10,4 +10,9 @@ import lombok.NoArgsConstructor;
 public class ResponseUsuarioDTO {
     private Long id;
     private String nome;
+    private String email;
+    private String endereco;
+    private String cidade;
+    private String estado;
+    private String telefone;
 }
