@@ -1,9 +1,12 @@
 package br.com.senai.api_sutentavel.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,11 +30,5 @@ public class Usuario {
     private String telefone;
     @Column(nullable = false)
     private String endereco;
-//    @Column(nullable = false)
-//    private String cidade;
-//    @Column(nullable = false)
-//    private String estado;
-
-
 
 }
