@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,4 +66,48 @@ public class AcaoSustentavelController {
         this.acaoSustentavelService.delete(id);
         return ResponseEntity.ok("Ação Sustentável deletada com sucesso");
     }
+
+    //Método para buscar Ações Sustentáveis por categoria
+    @GetMapping("categoria/{categoria}")
+    public ResponseEntity<List<ResponseAcaoSustentavelDTO>> findByCategoriaPath(@PathVariable String categoria) {
+        List<AcaoSustentavel> acoesSustentaveis = this.acaoSustentavelService.findAcaoSustentavelByCategoria(categoria);
+        List<ResponseAcaoSustentavelDTO> acoesSustentaveisDTO = this.acaoSustentavelService.findAcaoSustentavelByCategoria(categoria).stream()
+                .map(acaoSustentavel -> modelMapper.map(acaoSustentavel, ResponseAcaoSustentavelDTO.class)).collect(Collectors.toList());
+        return acoesSustentaveis.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(acoesSustentaveisDTO);
+    }
+
+    //Método para buscar Ações Sustentáveis por categoria
+    @GetMapping("/categoria")
+    public ResponseEntity<List<ResponseAcaoSustentavelDTO>> findByCategoriaQuery(@RequestParam String tipo) {
+        List<AcaoSustentavel> acoesSustentaveis = this.acaoSustentavelService.findAcaoSustentavelByCategoria(tipo);
+        List<ResponseAcaoSustentavelDTO> acoesSustentaveisDTO = this.acaoSustentavelService.findAcaoSustentavelByCategoria(tipo).stream()
+                .map(acaoSustentavel -> modelMapper.map(acaoSustentavel, ResponseAcaoSustentavelDTO.class)).collect(Collectors.toList());
+        return acoesSustentaveis.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(acoesSustentaveisDTO);
+    }
+
+
+    @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    public String listAcesso() {
+        return "Ações sustentáveis (GET - Acesso para USER e ADMIN)";
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public String createAcesso() {
+        return "Ação sustentável criada (POST - Acesso apenas para ADMIN)";
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String updateAcesso(@PathVariable Long id) {
+        return "Ação sustentável atualizada (PUT - Acesso apenas para ADMIN)";
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deleteAcesso(@PathVariable Long id) {
+        return "Ação sustentável deletada (DELETE - Acesso apenas para ADMIN)";
+    }
+
 }
