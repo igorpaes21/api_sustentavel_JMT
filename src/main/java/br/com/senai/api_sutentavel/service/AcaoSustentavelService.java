@@ -1,12 +1,14 @@
 package br.com.senai.api_sutentavel.service;
 
 import br.com.senai.api_sutentavel.model.entity.AcaoSustentavel;
+import br.com.senai.api_sutentavel.model.enums.CategoriaAcao;
 import br.com.senai.api_sutentavel.model.exceptions.ResourceNotFoundException;
 import br.com.senai.api_sutentavel.repository.AcaoSustentavelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.List;
 
 @Service
@@ -18,6 +20,11 @@ public class AcaoSustentavelService {
     //Método para listar todas as Ações Sustentáveis
     public List<AcaoSustentavel> findAllAcaoSustentavel() {
         return acaoSustentavelRepository.findAll();
+    }
+
+    public List<AcaoSustentavel> findAcaoSustentavelByCategoria(String categoria) {
+        CategoriaAcao categoriaAcao = CategoriaAcao.valueOf(categoria);
+        return acaoSustentavelRepository.findByCategoria(categoriaAcao);
     }
 
     //Método para listar uma Ação Sustentável pelo Id
@@ -45,6 +52,8 @@ public class AcaoSustentavelService {
         AcaoSustentavel acaoSustentavel = findAcaoSustentavelById(id);
         acaoSustentavelRepository.delete(acaoSustentavel);
     }
+
+
 
 
 
